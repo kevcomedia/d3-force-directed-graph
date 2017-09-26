@@ -5,5 +5,7 @@
  * Export only from the modules that you need to keep the bundle size minimal.
  */
 export {max, min} from 'd3-array';
+export * from 'd3-force';
+export * from 'd3-request';
 export {scaleLinear} from 'd3-scale';
 export {select, selectAll} from 'd3-selection';

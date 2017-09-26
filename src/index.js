@@ -1,28 +1,60 @@
 import * as d3 from './d3.exports.js';
 
-/**
- * Feel free to modify/remove anything below.
- */
+const dataUrl = process.env.NODE_ENV == 'production'
+  ? 'https://raw.githubusercontent.com/DealPete/forceDirected/master/countries.json'
+  : '../data/countries.json';
 
-const data = [20, 10, 30];
+const svg = d3.select('#graph');
+const width = +svg.attr('width');
+const height = +svg.attr('height');
 
-const svg = d3.select('#graph')
-  .attr('width', 600)
-  .attr('height', 300);
+const nodeRadius = 2;
 
-const xScale = d3.scaleLinear()
-  .domain([0, data.length - 1])
-  .range([100, 500]);
+const linkForce = d3.forceLink();
+const chargeForce = d3.forceManyBody().strength(-8);
+const centerForce = d3.forceCenter(width / 2, height / 2);
 
-const colorScale = d3.scaleLinear()
-  .domain([d3.min(data), d3.max(data)])
-  .range(['orange', 'blue']);
+const simulation = d3.forceSimulation()
+  .force('link', linkForce)
+  .force('charge', chargeForce)
+  .force('center', centerForce);
 
-svg.selectAll('circle')
-  .data(data)
-  .enter()
-  .append('circle')
-  .attr('fill', (d) => colorScale(d))
-  .attr('cx', (d, i) => xScale(i))
-  .attr('cy', 150)
-  .attr('r', (d) => d * 3);
+d3.json(dataUrl, (graph) => {
+  const link = svg.append('g')
+    .attr('class', 'links')
+    .selectAll('line')
+    .data(graph.links)
+    .enter()
+    .append('line')
+    .attr('stroke', '#aaa');
+
+  const node = svg.append('g')
+    .attr('class', 'nodes')
+    .selectAll('circle')
+    .data(graph.nodes)
+    .enter()
+    .append('circle')
+    .attr('r', nodeRadius)
+    .attr('fill', 'black');
+
+  simulation
+    .nodes(graph.nodes)
+    .on('tick', ticked);
+
+  linkForce.links(graph.links);
+
+  /**
+   * Tick event callback.
+   */
+  function ticked() {
+    link
+      .attr('x1', (d) => d.source.x)
+      .attr('y1', (d) => d.source.y)
+      .attr('x2', (d) => d.target.x)
+      .attr('y2', (d) => d.target.y);
+
+    node
+      .attr('cx', (d) => d.x = Math.max(nodeRadius, Math.min(width - 2, d.x)))
+      .attr('cy', (d) => d.y = Math.max(nodeRadius, Math.min(height - 2, d.y)));
+  }
+});
