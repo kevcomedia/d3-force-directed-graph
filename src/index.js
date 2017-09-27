@@ -1,4 +1,5 @@
 import * as d3 from './d3.exports.js';
+import {createDrag} from './dragging.js';
 import flagSprites from './flags/flags.png';
 
 const dataUrl = process.env.NODE_ENV == 'production'
@@ -73,7 +74,8 @@ d3.json(dataUrl, (graph) => {
     .enter()
     .append('use')
     .attr('href', (d) => `#flag-${d.code}`)
-    .attr('transform', `translate(${-flagWidth / 2}, ${-flagHeight / 2})`);
+    .attr('transform', `translate(${-flagWidth / 2}, ${-flagHeight / 2})`)
+    .call(createDrag(simulation));
 
   simulation
     .nodes(graph.nodes)
