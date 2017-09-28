@@ -1,6 +1,6 @@
 {
-  "name": "d3-starter",
-  "version": "1.0.1",
+  "name": "d3-force-directed-graph",
+  "version": "1.0.0",
   "description": "Starter config for d3 projects",
   "main": "index.js",
   "scripts": {
