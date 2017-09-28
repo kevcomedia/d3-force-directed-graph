@@ -31,8 +31,7 @@ d3.json(dataUrl, (graph) => {
     .selectAll('line')
     .data(graph.links)
     .enter()
-    .append('line')
-    .attr('stroke', '#aaa');
+    .append('line');
 
   const node = svg.append('g')
     .attr('class', 'nodes')
