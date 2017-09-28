@@ -13,11 +13,13 @@ const height = +svg.attr('height');
 const linkForce = d3.forceLink();
 const chargeForce = d3.forceManyBody().strength(-8);
 const centerForce = d3.forceCenter(width / 2, height / 2);
+const collideForce = d3.forceCollide(20).strength(0.2);
 
 const simulation = d3.forceSimulation()
   .force('link', linkForce)
   .force('charge', chargeForce)
-  .force('center', centerForce);
+  .force('center', centerForce)
+  .force('collide', collideForce);
 
 d3.json(dataUrl, (graph) => {
   const flags = flagSprites(graph.nodes);
