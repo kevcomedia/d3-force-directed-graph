@@ -57,6 +57,12 @@ export function flagSprites() {
       return this;
     },
 
+    setNodeFlag(node) {
+      node
+        .attr('href', (d) => `#flag-${d.code}`)
+        .attr('transform', `translate(${-flagWidth / 2}, ${-flagHeight / 2})`);
+    },
+
     setData(d) {
       data = d;
 

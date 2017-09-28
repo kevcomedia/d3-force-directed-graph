@@ -41,9 +41,7 @@ d3.json(dataUrl, (graph) => {
     .data(graph.nodes)
     .enter()
     .append('use')
-    .attr('href', (d) => `#flag-${d.code}`)
-    .attr('transform',
-      `translate(${-flagWidth / 2}, ${-flagHeight / 2})`)
+    .call(flags.setNodeFlag)
     .call(createDrag(simulation));
 
   simulation
