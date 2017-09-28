@@ -20,8 +20,7 @@ const simulation = d3.forceSimulation()
   .force('center', centerForce);
 
 d3.json(dataUrl, (graph) => {
-  const flags = flagSprites()
-    .setData(graph.nodes);
+  const flags = flagSprites(graph.nodes);
 
   svg.call(flags.createDefs);
 

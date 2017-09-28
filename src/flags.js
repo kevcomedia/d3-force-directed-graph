@@ -5,16 +5,16 @@ import flagSpritePng from './flags/flags.png';
  * Returns an object that provides methods for setting the flag sprites as well
  * as other related utilities.
  *
+ * @param {object} data - The data to be consumed by the `<defs>` element for
+ *    making SVG sprites.
  * @return {object}
  */
-export function flagSprites() {
+export function flagSprites(data) {
   const flagWidth = 16;
   const flagHeight = 11;
   // Dimensions of the flags.png file
   const spritesWidth = 256;
   const spritesHeight = 176;
-
-  let data = null;
 
   return {
     createDefs(svg) {
@@ -72,12 +72,6 @@ export function flagSprites() {
           .attr('x', (d) => d.x = position(flagWidth, svgWidth, d.x))
           .attr('y', (d) => d.y = position(flagHeight, svgHeight, d.y));
       };
-    },
-
-    setData(d) {
-      data = d;
-
-      return this;
     },
 
     getFlagDimensions() {
