@@ -1,6 +1,6 @@
 import * as d3 from './d3.exports.js';
+import {flagSprites} from './flags.js';
 import {createDrag} from './dragging.js';
-import flagSprites from './flags/flags.png';
 
 const dataUrl = process.env.NODE_ENV == 'production'
   ? 'https://raw.githubusercontent.com/DealPete/forceDirected/master/countries.json'
@@ -9,24 +9,6 @@ const dataUrl = process.env.NODE_ENV == 'production'
 const svg = d3.select('#graph');
 const width = +svg.attr('width');
 const height = +svg.attr('height');
-
-const flagWidth = 16;
-const flagHeight = 11;
-
-const defs = svg.append('defs');
-
-const clipPath = defs.append('clipPath')
-  .attr('id', 'icon-cp');
-
-clipPath.append('rect')
-  .attr('width', 16)
-  .attr('height', 11);
-
-defs.append('image')
-  .attr('id', 'icon-sprite')
-  .attr('width', 256)
-  .attr('height', 176)
-  .attr('href', flagSprites);
 
 const linkForce = d3.forceLink();
 const chargeForce = d3.forceManyBody().strength(-8);
@@ -38,26 +20,12 @@ const simulation = d3.forceSimulation()
   .force('center', centerForce);
 
 d3.json(dataUrl, (graph) => {
-  const flag = defs.selectAll('.flagSprite')
-    .data(graph.nodes)
-    .enter()
-    .append('g')
-    .attr('class', 'flagSprite')
-    .attr('id', (d) => `flag-${d.code}`)
-    .attr('clip-path', 'url(#icon-cp)');
+  const flags = flagSprites()
+    .setData(graph.nodes);
 
-  flag.append('use')
-    .attr('href', '#icon-sprite')
-    .attr('class', (d) => `flag flag-${d.code}`);
+  svg.call(flags.createDefs);
 
-  flag.selectAll('use')
-    .attr('transform', function(d) {
-      // eslint-disable-next-line no-invalid-this
-      const translate = d3.select(this).style('background-position')
-        .replace(/[px]/g, '')
-        .replace(' ', ',');
-      return `translate(${translate})`;
-    });
+  const {width: flagWidth, height: flagHeight} = flags.getFlagDimensions();
 
   const link = svg.append('g')
     .attr('class', 'links')
@@ -74,7 +42,8 @@ d3.json(dataUrl, (graph) => {
     .enter()
     .append('use')
     .attr('href', (d) => `#flag-${d.code}`)
-    .attr('transform', `translate(${-flagWidth / 2}, ${-flagHeight / 2})`)
+    .attr('transform',
+      `translate(${-flagWidth / 2}, ${-flagHeight / 2})`)
     .call(createDrag(simulation));
 
   simulation
