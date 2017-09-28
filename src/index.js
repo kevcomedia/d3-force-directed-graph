@@ -25,8 +25,6 @@ d3.json(dataUrl, (graph) => {
 
   svg.call(flags.createDefs);
 
-  const {width: flagWidth, height: flagHeight} = flags.getFlagDimensions();
-
   const link = svg.append('g')
     .attr('class', 'links')
     .selectAll('line')
@@ -60,10 +58,9 @@ d3.json(dataUrl, (graph) => {
       .attr('x2', (d) => d.target.x)
       .attr('y2', (d) => d.target.y);
 
-    node
-      .attr('x', (d) =>
-        d.x = Math.max(flagWidth / 2, Math.min(width - flagWidth / 2, d.x)))
-      .attr('y', (d) =>
-        d.y = Math.max(flagHeight / 2, Math.min(height - flagHeight / 2, d.y)));
+    node.call(flags.setNodePositionOnTick({
+      svgWidth: width,
+      svgHeight: height
+    }));
   }
 });

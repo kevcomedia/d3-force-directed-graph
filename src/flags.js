@@ -63,6 +63,17 @@ export function flagSprites() {
         .attr('transform', `translate(${-flagWidth / 2}, ${-flagHeight / 2})`);
     },
 
+    setNodePositionOnTick({svgWidth = 0, svgHeight = 0} = {}) {
+      const position = (flagDim, svgDim, pos) =>
+        Math.max(flagDim / 2, Math.min(svgDim - flagDim / 2, pos));
+
+      return function(node) {
+        node
+          .attr('x', (d) => d.x = position(flagWidth, svgWidth, d.x))
+          .attr('y', (d) => d.y = position(flagHeight, svgHeight, d.y));
+      };
+    },
+
     setData(d) {
       data = d;
 
