@@ -1,10 +1,18 @@
 body {
-  color: #444;
+  background-color: #011627;
+  color: #eef;
   font-family: sans-serif;
 }
 
-h1 {
+h1,
+footer {
   text-align: center;
+}
+
+a,
+a:hover,
+a:active {
+  color: darken(#eef, 15%);
 }
 
 #graph {
