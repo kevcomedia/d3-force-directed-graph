@@ -43,6 +43,9 @@ d3.json(dataUrl, (graph) => {
     .call(flags.setNodeFlag)
     .call(createDrag(simulation));
 
+  node.append('title')
+    .text((d) => d.country);
+
   simulation
     .nodes(graph.nodes)
     .on('tick', ticked);
